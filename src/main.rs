@@ -43,7 +43,7 @@ fn main() {
                     }),
                     ..default()
                 })
-                // Work arouns for https://github.com/bevyengine/bevy/issues/7620
+                // Work around for https://github.com/bevyengine/bevy/issues/7620
                 .set(RenderPlugin {
                     wgpu_settings: WgpuSettings {
                         backends: Some(Backends::PRIMARY),
@@ -66,13 +66,16 @@ struct Scroll;
 struct Ground;
 
 fn scene_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    // Spawn a 2D camera
     commands.spawn(Camera2dBundle::default());
 
+    // Spawn the background sprite
     commands.spawn(SpriteBundle {
         texture: asset_server.load("sprites/background.png"),
         ..Default::default()
     });
 
+    // Spawn 2 ground sprites so that they can scroll infinitely
     let texture_handle = asset_server.load("sprites/ground.png");
     for i in 0..2 {
         commands.spawn((
@@ -87,6 +90,7 @@ fn scene_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     }
 }
 
+// Return true if the user has clicked, tapped or pressed the space bar
 pub fn is_input(
     keyboard_input: Res<Input<KeyCode>>,
     mouse_button_input: Res<Input<MouseButton>>,
@@ -96,18 +100,10 @@ pub fn is_input(
         || mouse_button_input.just_pressed(MouseButton::Left)
         || touch_input.any_just_pressed()
 }
-pub fn swap_components<Old: Component, New: Component + Default>(
-    mut commands: Commands,
-    query: Query<Entity, With<Old>>,
-) {
-    for entity in &query {
-        commands.entity(entity).remove::<Old>();
-        commands.entity(entity).insert(New::default());
-    }
-}
 
+// Despawn all entities recursively with a given component
 pub fn cleanup<T: Component>(mut commands: Commands, query: Query<Entity, With<T>>) {
     for entity in query.iter() {
-        commands.entity(entity).despawn();
+        commands.entity(entity).despawn_recursive();
     }
 }

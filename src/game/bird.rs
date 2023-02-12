@@ -1,6 +1,4 @@
-use super::{
-    BIRD_ANIMATION_SPEED, FALL_SPEED, FALL_VELOCITY_LIMIT, JUMP_AMMOUNT, MOVE_SPEED,
-};
+use super::{BIRD_ANIMATION_SPEED, FALL_SPEED, FALL_VELOCITY_LIMIT, JUMP_AMOUNT, MOVE_SPEED};
 use bevy::prelude::*;
 
 #[derive(Component, Default)]
@@ -10,7 +8,7 @@ pub struct Bird {
 
 pub(super) fn jump(mut bird: Query<&mut Bird>) {
     for mut bird in &mut bird {
-        bird.velocity = JUMP_AMMOUNT;
+        bird.velocity = JUMP_AMOUNT;
     }
 }
 

@@ -6,12 +6,12 @@ impl Plugin for GameOverPlugin {
     fn build(&self, app: &mut App) {
         app.add_system_to_schedule(OnEnter(GameState::GameOver), setup_game_over)
             .add_system(goto_menu.on_update(GameState::GameOver).run_if(is_input))
-            .add_system_to_schedule(OnExit(GameState::GameOver), cleanup::<GameOverEntity>);
+            .add_system_to_schedule(OnExit(GameState::GameOver), cleanup::<DespawnOnReset>);
     }
 }
 
 #[derive(Component, Default)]
-pub struct GameOverEntity;
+pub struct DespawnOnReset;
 
 fn setup_game_over(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
@@ -20,7 +20,7 @@ fn setup_game_over(mut commands: Commands, asset_server: Res<AssetServer>) {
             transform: Transform::from_xyz(0.0, 80.0, UI_Z),
             ..Default::default()
         },
-        GameOverEntity,
+        DespawnOnReset,
     ));
 }
 
