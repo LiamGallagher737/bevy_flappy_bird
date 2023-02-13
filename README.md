@@ -6,6 +6,10 @@ This is the final project for my Bevy Flappy Bird tutorial (not released yet, wa
 
 </div>
 
+## Assets
+
+You can download just the assets [here](github_assets/assets.zip). This includes the sprites, audio and the flappy bird font.
+
 ## What is covered
 
 - Fundamentals of Bevy ECS
