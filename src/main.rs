@@ -36,6 +36,7 @@ fn main() {
                     }),
                     ..default()
                 })
+                .set(ImagePlugin::default_nearest())
                 // Work around for https://github.com/bevyengine/bevy/issues/7620
                 // Remove when building for wasm
                 // .set(bevy::render::RenderPlugin {
