@@ -38,12 +38,12 @@ fn main() {
                 })
                 // Work around for https://github.com/bevyengine/bevy/issues/7620
                 // Remove when building for wasm
-                .set(bevy::render::RenderPlugin {
-                    wgpu_settings: bevy::render::settings::WgpuSettings {
-                        backends: Some(bevy::render::settings::Backends::PRIMARY),
-                        ..Default::default()
-                    },
-                }),
+                // .set(bevy::render::RenderPlugin {
+                //     wgpu_settings: bevy::render::settings::WgpuSettings {
+                //         backends: Some(bevy::render::settings::Backends::PRIMARY),
+                //         ..Default::default()
+                //     },
+                // }),
         )
         .add_state::<GameState>()
         .add_startup_system(scene_setup)
