@@ -38,12 +38,12 @@ fn main() {
                 })
                 // Work around for https://github.com/bevyengine/bevy/issues/7620
                 // Remove when building for wasm
-                // .set(bevy::render::RenderPlugin {
-                //     wgpu_settings: bevy::render::settings::WgpuSettings {
-                //         backends: Some(bevy::render::settings::Backends::PRIMARY),
-                //         ..Default::default()
-                //     },
-                // }),
+                .set(bevy::render::RenderPlugin {
+                    wgpu_settings: bevy::render::settings::WgpuSettings {
+                        backends: Some(bevy::render::settings::Backends::PRIMARY),
+                        ..Default::default()
+                    },
+                }),
         )
         .add_state::<GameState>()
         .add_startup_system(scene_setup)
@@ -51,6 +51,13 @@ fn main() {
         .add_plugin(game_over::GameOverPlugin)
         .add_plugin(menu::MenuPlugin)
         .run();
+}
+
+#[derive(Resource)]
+struct AudioHandles {
+    flap: Handle<AudioSource>,
+    hit: Handle<AudioSource>,
+    point: Handle<AudioSource>,
 }
 
 #[derive(Component)]
@@ -82,6 +89,13 @@ fn scene_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             },
         ));
     }
+
+    // Load audio files
+    commands.insert_resource(AudioHandles {
+        flap: asset_server.load("audio/flap.ogg"),
+        hit: asset_server.load("audio/hit.ogg"),
+        point: asset_server.load("audio/point.ogg"),
+    });
 }
 
 // Return true if the user has clicked, tapped or pressed the space bar

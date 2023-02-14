@@ -1,6 +1,6 @@
 use super::BIRD_Z;
-use crate::BIRD_SIZE;
 use crate::{game_over::DespawnOnReset, is_input, GameState, Ground, Scroll, GROUND_WIDTH};
+use crate::{AudioHandles, BIRD_SIZE};
 use bevy::prelude::*;
 use bird::Bird;
 
@@ -56,7 +56,7 @@ impl Plugin for GamePlugin {
                     pipes::despawn_pipe.run_if(state_equals(PlayState::Normal)),
                     // Sound
                     point_sound.run_if(|s: Res<Score>| s.is_changed()),
-                    jump_sound
+                    flap_sound
                         .run_if(is_input)
                         .run_if(state_equals(PlayState::Normal)),
                     // Other
@@ -189,14 +189,14 @@ fn reset_timer(mut timer: ResMut<PipeSpawnTimer>) {
     timer.0.reset();
 }
 
-fn jump_sound(asset_server: Res<AssetServer>, audio: Res<Audio>) {
-    audio.play(asset_server.load("audio/flap.ogg"));
+fn flap_sound(audio_handles: Res<AudioHandles>, audio: Res<Audio>) {
+    audio.play(audio_handles.flap.clone());
 }
 
-fn hit_sound(asset_server: Res<AssetServer>, audio: Res<Audio>) {
-    audio.play(asset_server.load("audio/hit.ogg"));
+fn hit_sound(audio_handles: Res<AudioHandles>, audio: Res<Audio>) {
+    audio.play(audio_handles.hit.clone());
 }
 
-fn point_sound(asset_server: Res<AssetServer>, audio: Res<Audio>) {
-    audio.play(asset_server.load("audio/point.ogg"));
+fn point_sound(audio_handles: Res<AudioHandles>, audio: Res<Audio>) {
+    audio.play(audio_handles.point.clone());
 }
