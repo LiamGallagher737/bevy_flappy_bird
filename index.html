@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    
+
+<link rel="preload" href="/bevy_flappy_bird/bevy_flappy_bird-4da274c16d1e076e_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/bevy_flappy_bird/bevy_flappy_bird-4da274c16d1e076e.js"></head>
+
+<body>
+
+
+<style>
+    body,
+    html {
+        height: 100%;
+    }
+
+    body {
+        background: repeating-linear-gradient(135deg,
+                black 0,
+                black 2px,
+                white 2px,
+                white 20px);
+        margin: 0;
+    }
+
+    canvas {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<script type="module">import init from '/bevy_flappy_bird/bevy_flappy_bird-4da274c16d1e076e.js';init('/bevy_flappy_bird/bevy_flappy_bird-4da274c16d1e076e_bg.wasm');</script></body></html>
