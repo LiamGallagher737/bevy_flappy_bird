@@ -5,7 +5,11 @@ pub struct GameOverPlugin;
 impl Plugin for GameOverPlugin {
     fn build(&self, app: &mut App) {
         app.add_system_to_schedule(OnEnter(GameState::GameOver), setup_game_over)
-            .add_system(goto_menu.on_update(GameState::GameOver).run_if(is_input))
+            .add_system(
+                goto_menu
+                    .in_set(OnUpdate(GameState::GameOver))
+                    .run_if(is_input),
+            )
             .add_system_to_schedule(OnExit(GameState::GameOver), cleanup::<DespawnOnReset>);
     }
 }

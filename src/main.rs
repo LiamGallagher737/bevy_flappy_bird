@@ -1,13 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use bevy::{
-    prelude::*,
-    render::{
-        settings::{Backends, WgpuSettings},
-        RenderPlugin,
-    },
-    window::WindowResolution,
-};
+use bevy::{prelude::*, window::WindowResolution};
 
 mod game;
 mod game_over;
@@ -38,15 +31,16 @@ fn main() {
                     primary_window: Some(Window {
                         title: String::from("Flappy Bird"),
                         resolution: WindowResolution::new(288.0, 512.0),
-                        // resizable: false,
+                        resizable: false,
                         ..default()
                     }),
                     ..default()
                 })
                 // Work around for https://github.com/bevyengine/bevy/issues/7620
-                .set(RenderPlugin {
-                    wgpu_settings: WgpuSettings {
-                        backends: Some(Backends::PRIMARY),
+                // Remove when building for wasm
+                .set(bevy::render::RenderPlugin {
+                    wgpu_settings: bevy::render::settings::WgpuSettings {
+                        backends: Some(bevy::render::settings::Backends::PRIMARY),
                         ..Default::default()
                     },
                 }),

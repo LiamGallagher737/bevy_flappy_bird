@@ -7,7 +7,7 @@ impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app.add_system_to_schedule(OnEnter(GameState::Menu), setup_menu)
             .add_system_to_schedule(OnExit(GameState::Menu), cleanup::<MenuEntity>)
-            .add_system(start_playing.on_update(GameState::Menu).run_if(is_input));
+            .add_system(start_playing.in_set(OnUpdate(GameState::Menu)).run_if(is_input));
     }
 }
 

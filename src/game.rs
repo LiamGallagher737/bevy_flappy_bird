@@ -65,7 +65,7 @@ impl Plugin for GamePlugin {
                     scroll.run_if(state_equals(PlayState::Normal)),
                     reuse_ground.run_if(state_equals(PlayState::Normal)),
                 )
-                    .on_update(GameState::Playing),
+                    .in_set(OnUpdate(GameState::Playing)),
             );
     }
 }
