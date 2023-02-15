@@ -1,4 +1,4 @@
-use crate::{cleanup, is_input, GameState, UI_Z};
+use crate::{cleanup, has_user_input, GameState, UI_Z};
 use bevy::prelude::*;
 
 pub struct GameOverPlugin;
@@ -8,7 +8,7 @@ impl Plugin for GameOverPlugin {
             .add_system(
                 goto_menu
                     .in_set(OnUpdate(GameState::GameOver))
-                    .run_if(is_input),
+                    .run_if(has_user_input),
             )
             .add_system_to_schedule(OnExit(GameState::GameOver), cleanup::<DespawnOnReset>);
     }

@@ -39,12 +39,12 @@ fn main() {
                 .set(ImagePlugin::default_nearest())
                 // Work around for https://github.com/bevyengine/bevy/issues/7620
                 // Remove when building for wasm
-                // .set(bevy::render::RenderPlugin {
-                //     wgpu_settings: bevy::render::settings::WgpuSettings {
-                //         backends: Some(bevy::render::settings::Backends::PRIMARY),
-                //         ..Default::default()
-                //     },
-                // }),
+                .set(bevy::render::RenderPlugin {
+                    wgpu_settings: bevy::render::settings::WgpuSettings {
+                        backends: Some(bevy::render::settings::Backends::PRIMARY),
+                        ..Default::default()
+                    },
+                }),
         )
         .add_state::<GameState>()
         .add_startup_system(scene_setup)
@@ -100,7 +100,7 @@ fn scene_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 
 // Return true if the user has clicked, tapped or pressed the space bar
-pub fn is_input(
+pub fn has_user_input(
     keyboard_input: Res<Input<KeyCode>>,
     mouse_button_input: Res<Input<MouseButton>>,
     touch_input: Res<Touches>,

@@ -1,5 +1,5 @@
 use super::UI_Z;
-use crate::{cleanup, is_input, GameState};
+use crate::{cleanup, has_user_input, GameState};
 use bevy::prelude::*;
 
 pub struct MenuPlugin;
@@ -7,7 +7,11 @@ impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app.add_system_to_schedule(OnEnter(GameState::Menu), setup_menu)
             .add_system_to_schedule(OnExit(GameState::Menu), cleanup::<MenuEntity>)
-            .add_system(start_playing.in_set(OnUpdate(GameState::Menu)).run_if(is_input));
+            .add_system(
+                start_playing
+                    .in_set(OnUpdate(GameState::Menu))
+                    .run_if(has_user_input),
+            );
     }
 }
 

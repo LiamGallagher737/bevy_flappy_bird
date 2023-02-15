@@ -1,5 +1,5 @@
 use super::BIRD_Z;
-use crate::{game_over::DespawnOnReset, is_input, GameState, Ground, Scroll, GROUND_WIDTH};
+use crate::{game_over::DespawnOnReset, has_user_input, GameState, Ground, Scroll, GROUND_WIDTH};
 use crate::{AudioHandles, BIRD_SIZE};
 use bevy::prelude::*;
 use bird::Bird;
@@ -45,25 +45,25 @@ impl Plugin for GamePlugin {
                     // Bird
                     bird::fall,
                     bird::move_bird,
-                    bird::animate_bird.run_if(state_equals(PlayState::Normal)),
+                    bird::animate_bird.run_if(in_state(PlayState::Normal)),
                     bird::jump
-                        .run_if(is_input)
-                        .run_if(state_equals(PlayState::Normal)),
+                        .run_if(has_user_input)
+                        .run_if(in_state(PlayState::Normal)),
                     // Pipes
-                    pipes::check_passed_pipe.run_if(state_equals(PlayState::Normal)),
-                    pipes::check_pipe_collision.run_if(state_equals(PlayState::Normal)),
-                    pipes::spawn_pipe.run_if(state_equals(PlayState::Normal)),
-                    pipes::despawn_pipe.run_if(state_equals(PlayState::Normal)),
+                    pipes::check_passed_pipe.run_if(in_state(PlayState::Normal)),
+                    pipes::check_pipe_collision.run_if(in_state(PlayState::Normal)),
+                    pipes::spawn_pipe.run_if(in_state(PlayState::Normal)),
+                    pipes::despawn_pipe.run_if(in_state(PlayState::Normal)),
                     // Sound
                     point_sound.run_if(|s: Res<Score>| s.is_changed()),
                     flap_sound
-                        .run_if(is_input)
-                        .run_if(state_equals(PlayState::Normal)),
+                        .run_if(has_user_input)
+                        .run_if(in_state(PlayState::Normal)),
                     // Other
                     check_death,
-                    update_score_text.run_if(state_equals(PlayState::Normal)),
-                    scroll.run_if(state_equals(PlayState::Normal)),
-                    reuse_ground.run_if(state_equals(PlayState::Normal)),
+                    update_score_text.run_if(in_state(PlayState::Normal)),
+                    scroll.run_if(in_state(PlayState::Normal)),
+                    reuse_ground.run_if(in_state(PlayState::Normal)),
                 )
                     .in_set(OnUpdate(GameState::Playing)),
             );
