@@ -43,27 +43,43 @@ impl Plugin for GamePlugin {
             .add_systems(
                 (
                     // Bird
+                    bird::animate_bird,
+                    bird::jump.run_if(has_user_input),
+                    // Pipes
+                    pipes::check_passed_pipe,
+                    pipes::check_pipe_collision,
+                    pipes::spawn_pipe,
+                    pipes::despawn_pipe,
+                    // Sound
+                    flap_sound.run_if(has_user_input),
+                    // Other
+                    update_score_text,
+                    scroll,
+                    reuse_ground,
+                )
+                    .in_set(OnUpdate(GameState::Playing))
+                    .in_set(OnUpdate(PlayState::Normal)),
+            )
+            .add_systems(
+                (
+                    // Bird
                     bird::fall,
                     bird::move_bird,
-                    bird::animate_bird.run_if(in_state(PlayState::Normal)),
-                    bird::jump
-                        .run_if(has_user_input)
-                        .run_if(in_state(PlayState::Normal)),
+                    // bird::animate_bird.run_if(in_state(PlayState::Normal)),
+                    // bird::jump.run_if(has_user_input).run_if(in_state(PlayState::Normal)),
                     // Pipes
-                    pipes::check_passed_pipe.run_if(in_state(PlayState::Normal)),
-                    pipes::check_pipe_collision.run_if(in_state(PlayState::Normal)),
-                    pipes::spawn_pipe.run_if(in_state(PlayState::Normal)),
-                    pipes::despawn_pipe.run_if(in_state(PlayState::Normal)),
+                    // pipes::check_passed_pipe.run_if(in_state(PlayState::Normal)),
+                    // pipes::check_pipe_collision.run_if(in_state(PlayState::Normal)),
+                    // pipes::spawn_pipe.run_if(in_state(PlayState::Normal)),
+                    // pipes::despawn_pipe.run_if(in_state(PlayState::Normal)),
                     // Sound
                     point_sound.run_if(|s: Res<Score>| s.is_changed()),
-                    flap_sound
-                        .run_if(has_user_input)
-                        .run_if(in_state(PlayState::Normal)),
+                    // flap_sound.run_if(has_user_input).run_if(in_state(PlayState::Normal)),
                     // Other
                     check_death,
-                    update_score_text.run_if(in_state(PlayState::Normal)),
-                    scroll.run_if(in_state(PlayState::Normal)),
-                    reuse_ground.run_if(in_state(PlayState::Normal)),
+                    // update_score_text.run_if(in_state(PlayState::Normal)),
+                    // scroll.run_if(in_state(PlayState::Normal)),
+                    // reuse_ground.run_if(in_state(PlayState::Normal)),
                 )
                     .in_set(OnUpdate(GameState::Playing)),
             );
