@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bevy = { git = "https://github.com/bevyengine/bevy", rev = "8d51f4a" }
+bevy = { git = "https://github.com/bevyengine/bevy", rev = "6a63940" }
 rand = "0.8"
 
 [profile.dev.package."*"]

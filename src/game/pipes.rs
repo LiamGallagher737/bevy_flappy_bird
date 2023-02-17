@@ -5,7 +5,6 @@ use crate::{Scroll, BIRD_SIZE, PIPE_SIZE, PIPE_Z};
 use bevy::prelude::*;
 use bevy::sprite::collide_aabb::collide;
 use rand::Rng;
-use std::f32::consts::PI;
 
 // Spawn a new pipe pair
 pub(super) fn spawn_pipe(
@@ -43,8 +42,11 @@ pub(super) fn spawn_pipe(
         DespawnOnReset,
         SpriteBundle {
             texture,
-            transform: Transform::from_xyz(PIPE_SPAWN_OFFSET, y + 160.0 + GAP_HEIGHT, PIPE_Z)
-                .with_rotation(Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, PI)),
+            transform: Transform::from_xyz(PIPE_SPAWN_OFFSET, y + 160.0 + GAP_HEIGHT, PIPE_Z),
+            sprite: Sprite {
+                flip_y: true,
+                ..Default::default()
+            },
             ..Default::default()
         },
     ));
