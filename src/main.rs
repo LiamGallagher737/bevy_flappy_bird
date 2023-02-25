@@ -43,7 +43,6 @@ fn main() {
         .add_plugin(game::GamePlugin)
         .add_plugin(game_over::GameOverPlugin)
         .add_plugin(menu::MenuPlugin)
-        .add_system(scene_setup.in_set(CoreSet::PostUpdate))
         .run();
 }
 
