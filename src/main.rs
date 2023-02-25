@@ -36,21 +36,14 @@ fn main() {
                     }),
                     ..default()
                 })
-                .set(ImagePlugin::default_nearest())
-                // Work around for https://github.com/bevyengine/bevy/issues/7620
-                // Remove when building for wasm
-                .set(bevy::render::RenderPlugin {
-                    wgpu_settings: bevy::render::settings::WgpuSettings {
-                        backends: Some(bevy::render::settings::Backends::PRIMARY),
-                        ..Default::default()
-                    },
-                }),
+                .set(ImagePlugin::default_nearest()),
         )
         .add_state::<GameState>()
-        .add_startup_system(scene_setup)
+        .add_system(scene_setup.on_startup())
         .add_plugin(game::GamePlugin)
         .add_plugin(game_over::GameOverPlugin)
         .add_plugin(menu::MenuPlugin)
+        .add_system(scene_setup.in_set(CoreSet::PostUpdate))
         .run();
 }
 

@@ -5,8 +5,8 @@ use bevy::prelude::*;
 pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_to_schedule(OnEnter(GameState::Menu), setup_menu)
-            .add_system_to_schedule(OnExit(GameState::Menu), cleanup::<MenuEntity>)
+        app.add_system(setup_menu.in_schedule(OnEnter(GameState::Menu)))
+            .add_system(cleanup::<MenuEntity>.in_schedule(OnExit(GameState::Menu)))
             .add_system(
                 start_playing
                     .in_set(OnUpdate(GameState::Menu))

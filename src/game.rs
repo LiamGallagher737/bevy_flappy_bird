@@ -34,12 +34,11 @@ impl Plugin for GamePlugin {
                 PIPE_SPAWN_TIME,
                 TimerMode::Repeating,
             )))
-            .add_system_to_schedule(OnEnter(GameState::Playing), game_setup)
-            .add_systems_to_schedule(
-                OnExit(GameState::Playing),
-                (hit_sound, reset_score, reset_timer),
+            .add_system(game_setup.in_schedule(OnEnter(GameState::Playing)))
+            .add_systems(
+                (hit_sound, reset_score, reset_timer).in_schedule(OnExit(GameState::Playing)),
             )
-            .add_system_to_schedule(OnEnter(PlayState::HitPipe), hit_sound)
+            .add_system(hit_sound.in_schedule(OnEnter(PlayState::HitPipe)))
             .add_systems(
                 (
                     // Bird
@@ -52,6 +51,7 @@ impl Plugin for GamePlugin {
                     pipes::despawn_pipe,
                     // Sound
                     flap_sound.run_if(has_user_input),
+                    point_sound.run_if(resource_changed::<Score>()),
                     // Other
                     update_score_text,
                     scroll,
@@ -65,21 +65,8 @@ impl Plugin for GamePlugin {
                     // Bird
                     bird::fall,
                     bird::move_bird,
-                    // bird::animate_bird.run_if(in_state(PlayState::Normal)),
-                    // bird::jump.run_if(has_user_input).run_if(in_state(PlayState::Normal)),
-                    // Pipes
-                    // pipes::check_passed_pipe.run_if(in_state(PlayState::Normal)),
-                    // pipes::check_pipe_collision.run_if(in_state(PlayState::Normal)),
-                    // pipes::spawn_pipe.run_if(in_state(PlayState::Normal)),
-                    // pipes::despawn_pipe.run_if(in_state(PlayState::Normal)),
-                    // Sound
-                    point_sound.run_if(|s: Res<Score>| s.is_changed()),
-                    // flap_sound.run_if(has_user_input).run_if(in_state(PlayState::Normal)),
                     // Other
                     check_death,
-                    // update_score_text.run_if(in_state(PlayState::Normal)),
-                    // scroll.run_if(in_state(PlayState::Normal)),
-                    // reuse_ground.run_if(in_state(PlayState::Normal)),
                 )
                     .in_set(OnUpdate(GameState::Playing)),
             );
@@ -142,8 +129,8 @@ fn game_setup(
                 ..Default::default()
             },
         ))
-        .with_children(|p| {
-            p.spawn((
+        .with_children(|node| {
+            node.spawn((
                 ScoreText,
                 TextBundle::from_section(
                     "0",

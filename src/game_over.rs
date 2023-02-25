@@ -4,13 +4,13 @@ use bevy::prelude::*;
 pub struct GameOverPlugin;
 impl Plugin for GameOverPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_to_schedule(OnEnter(GameState::GameOver), setup_game_over)
+        app.add_system(setup_game_over.in_schedule(OnEnter(GameState::GameOver)))
             .add_system(
                 goto_menu
                     .in_set(OnUpdate(GameState::GameOver))
                     .run_if(has_user_input),
             )
-            .add_system_to_schedule(OnExit(GameState::GameOver), cleanup::<DespawnOnReset>);
+            .add_system(cleanup::<DespawnOnReset>.in_schedule(OnExit(GameState::GameOver)));
     }
 }
 
