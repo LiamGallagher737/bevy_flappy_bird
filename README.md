@@ -2,7 +2,7 @@
 
 # Bevy Flappy Bird
 
-This is the final project for my Bevy Flappy Bird tutorial (not released yet, waiting for 0.10).
+This is the final project for my Bevy Flappy Bird tutorial (coming soon™).
 
 You can play the final project [here](https://liamgallagher737.github.io/bevy_flappy_bird). (Broken audio)
 
