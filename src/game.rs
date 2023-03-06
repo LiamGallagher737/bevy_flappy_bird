@@ -60,7 +60,7 @@ impl Plugin for GamePlugin {
                     .in_set(OnUpdate(GameState::Playing))
                     .in_set(OnUpdate(PlayState::Normal)),
             )
-            .add_systems(
+            .add_systems( // These will cotinue running after a pipe is hit
                 (
                     // Bird
                     bird::fall,
