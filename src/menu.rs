@@ -5,12 +5,11 @@ use bevy::prelude::*;
 pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(setup_menu.in_schedule(OnEnter(GameState::Menu)))
-            .add_system(cleanup::<MenuEntity>.in_schedule(OnExit(GameState::Menu)))
-            .add_system(
-                start_playing
-                    .in_set(OnUpdate(GameState::Menu))
-                    .run_if(has_user_input),
+        app.add_systems(OnEnter(GameState::Menu), setup_menu)
+            .add_systems(OnExit(GameState::Menu), cleanup::<MenuEntity>)
+            .add_systems(
+                Update,
+                start_playing.run_if(in_state(GameState::Menu).and_then(has_user_input)),
             );
     }
 }

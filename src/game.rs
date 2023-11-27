@@ -34,12 +34,14 @@ impl Plugin for GamePlugin {
                 PIPE_SPAWN_TIME,
                 TimerMode::Repeating,
             )))
-            .add_system(game_setup.in_schedule(OnEnter(GameState::Playing)))
+            .add_systems(OnEnter(GameState::Playing), game_setup)
             .add_systems(
-                (hit_sound, reset_score, reset_timer).in_schedule(OnExit(GameState::Playing)),
+                OnExit(GameState::Playing),
+                (hit_sound, reset_score, reset_timer),
             )
-            .add_system(hit_sound.in_schedule(OnEnter(PlayState::HitPipe)))
+            .add_systems(OnEnter(PlayState::HitPipe), hit_sound)
             .add_systems(
+                Update,
                 (
                     // Bird
                     bird::animate_bird,
@@ -57,10 +59,10 @@ impl Plugin for GamePlugin {
                     scroll,
                     reuse_ground,
                 )
-                    .in_set(OnUpdate(GameState::Playing))
-                    .in_set(OnUpdate(PlayState::Normal)),
+                    .run_if(in_state(GameState::Playing).and_then(in_state(PlayState::Normal))),
             )
             .add_systems(
+                Update,
                 // These will cotinue running after a pipe is hit
                 (
                     // Bird
@@ -69,7 +71,7 @@ impl Plugin for GamePlugin {
                     // Other
                     check_death,
                 )
-                    .in_set(OnUpdate(GameState::Playing)),
+                    .run_if(in_state(GameState::Playing)),
             );
     }
 }
@@ -123,7 +125,8 @@ fn game_setup(
             DespawnOnReset,
             NodeBundle {
                 style: Style {
-                    size: Size::all(Val::Percent(100.0)),
+                    width: Val::Percent(100.0),
+                    height: Val::Percent(100.0),
                     justify_content: JustifyContent::Center,
                     ..Default::default()
                 },
@@ -193,14 +196,23 @@ fn reset_timer(mut timer: ResMut<PipeSpawnTimer>) {
     timer.0.reset();
 }
 
-fn flap_sound(audio_handles: Res<AudioHandles>, audio: Res<Audio>) {
-    audio.play(audio_handles.flap.clone());
+fn flap_sound(audio_handles: Res<AudioHandles>, mut commands: Commands) {
+    commands.spawn(AudioBundle {
+        source: audio_handles.flap.clone(),
+        ..default()
+    });
 }
 
-fn hit_sound(audio_handles: Res<AudioHandles>, audio: Res<Audio>) {
-    audio.play(audio_handles.hit.clone());
+fn hit_sound(audio_handles: Res<AudioHandles>, mut commands: Commands) {
+    commands.spawn(AudioBundle {
+        source: audio_handles.hit.clone(),
+        ..default()
+    });
 }
 
-fn point_sound(audio_handles: Res<AudioHandles>, audio: Res<Audio>) {
-    audio.play(audio_handles.point.clone());
+fn point_sound(audio_handles: Res<AudioHandles>, mut commands: Commands) {
+    commands.spawn(AudioBundle {
+        source: audio_handles.point.clone(),
+        ..default()
+    });
 }
