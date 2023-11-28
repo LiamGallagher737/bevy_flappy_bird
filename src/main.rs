@@ -39,10 +39,12 @@ fn main() {
                 .set(ImagePlugin::default_nearest()),
         )
         .add_state::<GameState>()
-        .add_system(scene_setup.on_startup())
-        .add_plugin(game::GamePlugin)
-        .add_plugin(game_over::GameOverPlugin)
-        .add_plugin(menu::MenuPlugin)
+        .add_systems(Startup, scene_setup)
+        .add_plugins((
+            game::GamePlugin,
+            game_over::GameOverPlugin,
+            menu::MenuPlugin,
+        ))
         .run();
 }
 
