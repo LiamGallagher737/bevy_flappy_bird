@@ -1,6 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use bevy::{prelude::*, window::WindowResolution};
+use bevy::{
+    prelude::*,
+    window::{EnabledButtons, WindowResolution},
+};
 
 mod game;
 mod game_over;
@@ -32,6 +35,11 @@ fn main() {
                         title: String::from("Flappy Bird"),
                         resolution: WindowResolution::new(288.0, 512.0),
                         resizable: false,
+                        enabled_buttons: EnabledButtons {
+                            maximize: false,
+                            minimize: false,
+                            close: true,
+                        },
                         ..default()
                     }),
                     ..default()
