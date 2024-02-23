@@ -28,7 +28,7 @@ enum PlayState {
 pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_state::<PlayState>()
+        app.init_state::<PlayState>()
             .init_resource::<Score>()
             .insert_resource(PipeSpawnTimer(Timer::from_seconds(
                 PIPE_SPAWN_TIME,
@@ -53,7 +53,7 @@ impl Plugin for GamePlugin {
                     pipes::despawn_pipe,
                     // Sound
                     flap_sound.run_if(has_user_input),
-                    point_sound.run_if(resource_changed::<Score>()),
+                    point_sound.run_if(resource_changed::<Score>),
                     // Other
                     update_score_text,
                     scroll,
@@ -94,26 +94,23 @@ struct ApproachingPipe;
 fn game_setup(
     mut commands: Commands,
     mut play_state: ResMut<NextState<PlayState>>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut texture_atlases: ResMut<Assets<TextureAtlasLayout>>,
     asset_server: Res<AssetServer>,
 ) {
     // Load the bird sprite sheet and create a texture atlas from it
-    let bird_texture = asset_server.load("sprites/bird.png");
-    let texture_atlas = texture_atlases.add(TextureAtlas::from_grid(
-        bird_texture,
-        BIRD_SIZE,
-        4,
-        1,
-        None,
-        None,
-    ));
+    let atlas_layout =
+        texture_atlases.add(TextureAtlasLayout::from_grid(BIRD_SIZE, 4, 1, None, None));
 
     // Spawn the bird
     commands.spawn((
         Bird::default(),
         DespawnOnReset,
         SpriteSheetBundle {
-            texture_atlas,
+            atlas: TextureAtlas {
+                layout: atlas_layout,
+                index: 0,
+            },
+            texture: asset_server.load("sprites/bird.png"),
             transform: Transform::from_xyz(0.0, 0.0, BIRD_Z),
             ..Default::default()
         },
@@ -144,7 +141,7 @@ fn game_setup(
                         color: Color::WHITE,
                     },
                 )
-                .with_text_alignment(TextAlignment::Center),
+                .with_text_justify(JustifyText::Center),
             ));
         });
 

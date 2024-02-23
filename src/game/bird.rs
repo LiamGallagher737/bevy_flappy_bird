@@ -25,7 +25,7 @@ pub(super) fn move_bird(mut bird: Query<(&mut Transform, &Bird), With<Bird>>, ti
     }
 }
 
-pub(super) fn animate_bird(mut bird: Query<&mut TextureAtlasSprite, With<Bird>>, time: Res<Time>) {
+pub(super) fn animate_bird(mut bird: Query<&mut TextureAtlas, With<Bird>>, time: Res<Time>) {
     for mut bird in &mut bird {
         bird.index = (time.elapsed_seconds() * BIRD_ANIMATION_SPEED) as usize % 4;
     }
