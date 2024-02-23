@@ -98,13 +98,8 @@ fn game_setup(
     asset_server: Res<AssetServer>,
 ) {
     // Load the bird sprite sheet and create a texture atlas from it
-    let atlas_layout = texture_atlases.add(TextureAtlasLayout::from_grid(
-        BIRD_SIZE,
-        4,
-        1,
-        None,
-        None,
-    ));
+    let atlas_layout =
+        texture_atlases.add(TextureAtlasLayout::from_grid(BIRD_SIZE, 4, 1, None, None));
 
     // Spawn the bird
     commands.spawn((
