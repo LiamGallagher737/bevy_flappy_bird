@@ -2,8 +2,8 @@ use super::{bird::Bird, ApproachingPipe, Pipe, PipeSpawnTimer, PlayState, Score}
 use super::{GAP_HEIGHT, PIPE_SPAWN_OFFSET};
 use crate::game_over::DespawnOnReset;
 use crate::{Scroll, BIRD_SIZE, PIPE_SIZE, PIPE_Z};
+use bevy::math::bounding::{Aabb2d, IntersectsVolume};
 use bevy::prelude::*;
-use bevy::sprite::collide_aabb::collide;
 use rand::Rng;
 
 // Spawn a new pipe pair
@@ -86,7 +86,9 @@ pub(super) fn check_pipe_collision(
 ) {
     let bird = bird.single();
     for pipe in &pipes {
-        if collide(bird.translation, BIRD_SIZE, pipe.translation, PIPE_SIZE).is_some() {
+        let collision = Aabb2d::new(bird.translation.xy(), BIRD_SIZE / 2.00)
+            .intersects(&Aabb2d::new(pipe.translation.xy(), PIPE_SIZE / 2.0));
+        if collision {
             play_state.set(PlayState::HitPipe);
         }
     }
